@@ -7,7 +7,7 @@ RUN apt-get update && \
       ca-certificates samba samba-vfs-modules tini unzip curl && \
     rm -rf /var/lib/apt/lists/* && \
     addgroup --system smb && \
-    adduser --system --disabled-password --no-create-home --home /tmp --shell /sbin/nologin -G smb -g 'Samba User' smbuser && \
+    adduser --system --disabled-password --no-create-home --home /tmp --shell /sbin/nologin --ingroup smb --gecos 'Samba User' smbuser && \
     file="/etc/samba/smb.conf" && \
     sed -i 's|^;* *\(log file = \).*|   \1/dev/stdout|' $file && \
     sed -i 's|^;* *\(load printers = \).*|   \1no|' $file && \
