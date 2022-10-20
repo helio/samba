@@ -162,7 +162,7 @@ user() { local name="$1" passwd="$2" id="${3:-""}" group="${4:-""}" \
     [[ "$group" ]] && { grep -q "^$group:" /etc/group ||
                 addgroup ${gid:+--gid $gid }"$group"; }
     grep -q "^$name:" /etc/passwd ||
-        adduser --disabled-password --gecos '' --force-badname --no-create-home ${group:+--group $group} ${id:+--uid $id} "$name"
+        adduser --disabled-password --gecos '' --force-badname --no-create-home ${group:+--ingroup $group} ${id:+--uid $id} "$name"
     echo -e "$passwd\n$passwd" | smbpasswd -s -a "$name"
 }
 
