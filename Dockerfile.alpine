@@ -1,13 +1,11 @@
-FROM ubuntu:22.04
+FROM alpine:3.15
+MAINTAINER David Personette <dperson@gmail.com>
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-      ca-certificates samba samba-vfs-modules tini unzip curl && \
-    rm -rf /var/lib/apt/lists/* && \
-    addgroup --system smb && \
-    adduser --system -D -H -h /tmp --shell /sbin/nologin -G smb -g 'Samba User' smbuser && \
+# Install samba
+RUN apk --no-cache --no-progress upgrade && \
+    apk --no-cache --no-progress add bash samba shadow tini tzdata unzip && \
+    addgroup -S smb && \
+    adduser -S -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
     file="/etc/samba/smb.conf" && \
     sed -i 's|^;* *\(log file = \).*|   \1/dev/stdout|' $file && \
     sed -i 's|^;* *\(load printers = \).*|   \1no|' $file && \
@@ -67,4 +65,4 @@ HEALTHCHECK --interval=60s --timeout=15s \
 VOLUME ["/etc", "/var/cache/samba", "/var/lib/samba", "/var/log/samba",\
             "/run/samba"]
 
-ENTRYPOINT ["/usr/bin/tini", "--", "/usr/bin/samba.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/samba.sh"]
