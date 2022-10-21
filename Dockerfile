@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-      ca-certificates samba samba-vfs-modules tini unzip curl && \
+      ca-certificates samba samba-vfs-modules smbclient tini unzip curl && \
     rm -rf /var/lib/apt/lists/* && \
     addgroup --system smb && \
     adduser --system --disabled-password --no-create-home --home /tmp --shell /sbin/nologin --ingroup smb --gecos 'Samba User' smbuser && \
